@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from swiss_transport_mcp.formatters import (
     _format_duration,
     _format_occupancy,
+    build_sbb_url,
     format_connections,
     format_locations,
     format_stationboard,
@@ -17,9 +18,7 @@ from .conftest import (
     sample_location,
     sample_stationboard,
     sample_stationboard_entry,
-    sample_stop,
 )
-
 
 # --- format_locations ---
 
@@ -234,3 +233,43 @@ def test_format_occupancy_none():
 
 def test_format_occupancy_zero():
     assert _format_occupancy(0, 0) is None
+
+
+# --- build_sbb_url ---
+
+
+def test_build_sbb_url_basic():
+    url = build_sbb_url("Zürich HB", "Bern")
+    assert "von=Z%C3%BCrich%20HB" in url
+    assert "nach=Bern" in url
+    assert "sbb.ch/en?" in url
+    assert "moment=dep" in url
+
+
+def test_build_sbb_url_with_date_and_time():
+    url = build_sbb_url("Zürich HB", "Bern", date="2026-03-15", time="08:30")
+    assert "day=2026-03-15" in url
+    assert "time=08_30" in url
+
+
+def test_build_sbb_url_arrival():
+    url = build_sbb_url("Zürich", "Bern", is_arrival_time=True)
+    assert "moment=arr" in url
+
+
+def test_build_sbb_url_no_date():
+    url = build_sbb_url("Zürich", "Bern")
+    assert "day=" not in url
+    assert "time=" not in url
+
+
+# --- booking link in connections output ---
+
+
+def test_format_connections_includes_booking_link():
+    conn = sample_connection()
+    result = format_connections([conn], "Zürich HB", "Bern", date="2026-03-15", time="08:30")
+    assert "Book tickets:" in result
+    assert "sbb.ch" in result
+    assert "day=2026-03-15" in result
+    assert "time=08_30" in result

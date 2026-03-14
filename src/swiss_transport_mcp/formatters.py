@@ -1,10 +1,44 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+from urllib.parse import quote
 
 from swiss_transport_mcp.models import Connection, Location, Stationboard
 
 OCCUPANCY = {1: "\u25cf\u25cb\u25cb", 2: "\u25cf\u25cf\u25cb", 3: "\u25cf\u25cf\u25cf"}
+
+SBB_BASE_URL = "https://www.sbb.ch/en"
+
+
+def build_sbb_url(
+    from_station: str,
+    to_station: str,
+    date: str | None = None,
+    time: str | None = None,
+    is_arrival_time: bool = False,
+) -> str:
+    """Build a deep link to the SBB timetable/booking page.
+
+    Args:
+        from_station: Origin station name.
+        to_station: Destination station name.
+        date: Travel date as YYYY-MM-DD.
+        time: Travel time as HH:MM.
+        is_arrival_time: If True, time is desired arrival; otherwise departure.
+    """
+    params = [
+        ("von", from_station),
+        ("nach", to_station),
+    ]
+    if date:
+        params.append(("day", date))
+    if time:
+        # SBB frontend uses underscore as separator (HH_MM), not colon
+        params.append(("time", time.replace(":", "_")))
+    moment = "arr" if is_arrival_time else "dep"
+    params.append(("moment", moment))
+    query = "&".join(f"{k}={quote(v, safe='\":-_')}" for k, v in params)
+    return f"{SBB_BASE_URL}?{query}"
 
 
 def _format_time(dt: datetime | None) -> str:
@@ -59,7 +93,14 @@ def format_locations(locations: list[Location]) -> str:
     return "\n".join(lines)
 
 
-def format_connections(connections: list[Connection], from_name: str, to_name: str) -> str:
+def format_connections(
+    connections: list[Connection],
+    from_name: str,
+    to_name: str,
+    date: str | None = None,
+    time: str | None = None,
+    is_arrival_time: bool = False,
+) -> str:
     if not connections:
         return f"No connections found from {from_name} to {to_name}."
 
@@ -123,6 +164,9 @@ def format_connections(connections: list[Connection], from_name: str, to_name: s
                     lines.append(f"    {occ}")
 
             lines.append("")
+
+    url = build_sbb_url(from_name, to_name, date=date, time=time, is_arrival_time=is_arrival_time)
+    lines.append(f"Book tickets: {url}")
 
     return "\n".join(lines).rstrip()
 

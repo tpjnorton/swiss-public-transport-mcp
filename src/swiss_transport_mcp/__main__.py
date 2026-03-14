@@ -6,8 +6,10 @@ import httpx
 from mcp.server.fastmcp import Context, FastMCP
 
 from swiss_transport_mcp.clients.opendata import OpenDataClient
+from swiss_transport_mcp.formatters import build_sbb_url
 from swiss_transport_mcp.service import TransportService
 from swiss_transport_mcp.tools import (
+    BookingLinkInput,
     SearchConnectionsInput,
     SearchLocationsInput,
     StationboardInput,
@@ -143,6 +145,40 @@ async def get_stationboard(
         mode=inp.mode,
         transport_types=inp.transport_types,
     )
+
+
+@mcp.tool()
+async def get_booking_link(
+    from_station: str,
+    to_station: str,
+    date: str | None = None,
+    time: str | None = None,
+    is_arrival_time: bool = False,
+) -> str:
+    """Get a direct link to buy tickets on sbb.ch for a specific journey.
+
+    Use this when someone wants to:
+    - Buy a ticket ("book me a train from Zürich to Bern")
+    - Get a link to the SBB website for a specific route and time
+    - Share a timetable link with someone
+
+    Returns a ready-to-click URL that opens SBB's timetable with the search pre-filled.
+    """
+    inp = BookingLinkInput(
+        from_station=from_station,
+        to_station=to_station,
+        date=date,
+        time=time,
+        is_arrival_time=is_arrival_time,
+    )
+    url = build_sbb_url(
+        inp.from_station,
+        inp.to_station,
+        date=inp.date,
+        time=inp.time,
+        is_arrival_time=inp.is_arrival_time,
+    )
+    return f"Book your journey from {inp.from_station} to {inp.to_station} on SBB:\n{url}"
 
 
 def main():

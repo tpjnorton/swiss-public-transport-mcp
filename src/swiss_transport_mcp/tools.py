@@ -44,3 +44,11 @@ class StationboardInput(BaseModel):
     transport_types: list[Literal["train", "tram", "ship", "bus", "cableway"]] | None = Field(
         None, description="Filter by transport type. Omit for all types"
     )
+
+
+class BookingLinkInput(BaseModel):
+    from_station: str = Field(..., description="Departure station name")
+    to_station: str = Field(..., description="Arrival station name")
+    date: str | None = Field(None, description="Travel date (YYYY-MM-DD)")
+    time: str | None = Field(None, description="Travel time (HH:MM)")
+    is_arrival_time: bool = Field(False, description="If true, time is desired arrival time")

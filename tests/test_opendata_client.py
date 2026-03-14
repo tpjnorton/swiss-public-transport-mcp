@@ -5,7 +5,7 @@ import pytest
 import respx
 
 from swiss_transport_mcp.clients.opendata import OpenDataClient
-from swiss_transport_mcp.errors import RateLimitError, TransportAPIError
+from swiss_transport_mcp.errors import TransportAPIError
 
 BASE = "https://transport.opendata.ch/v1"
 

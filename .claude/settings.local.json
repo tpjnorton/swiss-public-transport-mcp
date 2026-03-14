@@ -15,7 +15,19 @@
       "Bash(D:/Github/personal/swiss-transport-mcp/.venv/Scripts/python -m pytest D:/Github/personal/swiss-transport-mcp/tests -v 2>&1)",
       "Read(//d/Github/personal/swiss-transport-mcp/$APPDATA/**)",
       "Read(//d/Github/personal/swiss-transport-mcp/$LOCALAPPDATA/**)",
-      "Read(//d/Github/personal/swiss-transport-mcp/**)"
+      "Read(//d/Github/personal/swiss-transport-mcp/**)",
+      "WebFetch(domain:www.sbb.ch)",
+      "WebFetch(domain:web.archive.org)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:www.google.com)",
+      "WebFetch(domain:company.sbb.ch)",
+      "WebFetch(domain:www.taywa.ch)",
+      "WebFetch(domain:sbbcffffs-community.sbb.ch)",
+      "WebFetch(domain:fahrplan.sbb.ch)",
+      "WebFetch(domain:docplayer.org)",
+      "WebFetch(domain:community.sbb.ch)",
+      "WebFetch(domain:www.suisserugby.com)",
+      "WebFetch(domain:node128930-test-ham.appengine.flow.ch)"
     ]
   }
 }

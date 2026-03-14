@@ -46,7 +46,14 @@ class TransportService:
                 transport_types=transport_types,
                 limit=limit,
             )
-            return format_connections(connections, from_station, to_station)
+            return format_connections(
+                connections,
+                from_station,
+                to_station,
+                date=date,
+                time=time,
+                is_arrival_time=is_arrival_time,
+            )
         except AmbiguousStationError as e:
             lines = ["Multiple stations match. Did you mean:"]
             for i, loc in enumerate(e.candidates, 1):

@@ -22,9 +22,7 @@ def mock_client():
     client.search_locations = AsyncMock(return_value=[])
     client.get_connections = AsyncMock(return_value=[])
     client.get_stationboard = AsyncMock(
-        return_value=Stationboard(
-            station=sample_location(), entries=[], mode="departure"
-        )
+        return_value=Stationboard(station=sample_location(), entries=[], mode="departure")
     )
     return client
 

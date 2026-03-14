@@ -1,12 +1,8 @@
 from __future__ import annotations
 
-import pytest
-
 from swiss_transport_mcp.errors import AmbiguousStationError, TransportAPIError
-from swiss_transport_mcp.models import Stationboard
 
 from .conftest import sample_connection, sample_location, sample_stationboard
-
 
 # --- search_locations ---
 
