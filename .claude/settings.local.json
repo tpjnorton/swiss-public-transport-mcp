@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash:*)",
+      "Bash(cat:*)",
+      "WebFetch(domain:transport.opendata.ch)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebSearch",
+      "WebFetch(domain:opentransportdata.swiss)",
+      "Bash(cd:*)",
+      "Bash(D:/Github/personal/swiss-transport-mcp/.venv/Scripts/ruff check:*)",
+      "Bash(D:/Github/personal/swiss-transport-mcp/.venv/Scripts/python -c \"from swiss_transport_mcp.__main__ import mcp; print\\('OK - Tools:', list\\(mcp._tool_manager._tools.keys\\(\\)\\)\\)\" 2>&1)",
+      "Bash(D:/Github/personal/swiss-transport-mcp/.venv/Scripts/python -m pytest D:/Github/personal/swiss-transport-mcp/tests -v 2>&1)",
+      "Read(//d/Github/personal/swiss-transport-mcp/$APPDATA/**)",
+      "Read(//d/Github/personal/swiss-transport-mcp/$LOCALAPPDATA/**)",
+      "Read(//d/Github/personal/swiss-transport-mcp/**)"
+    ]
+  }
+}
