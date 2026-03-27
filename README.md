@@ -7,13 +7,15 @@ Wraps [transport.opendata.ch](https://transport.opendata.ch) (free, no auth requ
 ## Install
 
 ```bash
-pip install swiss-transport-mcp
+git clone https://github.com/tpjnorton/swiss-transport-mcp.git
+cd swiss-transport-mcp
+uv sync
 ```
 
 ## Usage
 
 ```bash
-swiss-transport-mcp
+uv run swiss-transport-mcp
 ```
 
 Add to Claude Desktop config:
@@ -22,7 +24,8 @@ Add to Claude Desktop config:
 {
   "mcpServers": {
     "swiss-transport": {
-      "command": "swiss-transport-mcp"
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/swiss-transport-mcp", "swiss-transport-mcp"]
     }
   }
 }
