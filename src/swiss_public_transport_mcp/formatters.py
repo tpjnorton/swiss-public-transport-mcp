@@ -37,7 +37,7 @@ def build_sbb_url(
         params.append(("time", time.replace(":", "_")))
     moment = "arr" if is_arrival_time else "dep"
     params.append(("moment", moment))
-    query = "&".join(f"{k}={quote(v, safe='\":-_')}" for k, v in params)
+    query = "&".join(f"{k}={quote(v, safe='":-_')}" for k, v in params)
     return f"{SBB_BASE_URL}?{query}"
 
 

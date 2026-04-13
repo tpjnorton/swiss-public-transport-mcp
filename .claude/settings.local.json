@@ -34,7 +34,28 @@
       "WebFetch(domain:mcpmarket.com)",
       "Bash(gh api:*)",
       "Bash(git mv:*)",
-      "Bash(rm -rf src/swiss_public_transport_mcp/__pycache__ src/swiss_public_transport_mcp/clients/__pycache__)"
+      "Bash(rm -rf src/swiss_public_transport_mcp/__pycache__ src/swiss_public_transport_mcp/clients/__pycache__)",
+      "Bash(gh auth:*)",
+      "WebFetch(domain:smithery.ai)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(t['path']\\) for t in d.get\\('tree',[]\\) if 'publish' in t['path'].lower\\(\\) or 'guide' in t['path'].lower\\(\\)]\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/modelcontextprotocol/servers/main/README.md)",
+      "Bash(awk '/### 🌎 Community Servers/,/^## /')",
+      "Bash(awk -F'\\\\\\\\*\\\\\\\\*\\\\\\\\[' '{print NR, $2}')",
+      "Bash(awk -F'\\\\\\\\]' '{print $1}')",
+      "Bash(sort -k2 -f)",
+      "Bash(awk '/^[0-9]+ [Ss][uvw]/')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://pypi.org/project/swiss-public-transport-mcp/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://pypi.org/project/swiss-transport-mcp/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://pypi.org/project/swiss-public-transport/)",
+      "Bash(curl -sL https://pypi.org/pypi/swiss-public-transport-mcp/json)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); i=d.get\\('info',{}\\); print\\('name:', i.get\\('name'\\)\\); print\\('version:', i.get\\('version'\\)\\); print\\('author:', i.get\\('author'\\)\\); print\\('home:', i.get\\('home_page'\\) or i.get\\('project_urls'\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w \"simple/swiss-public-transport-mcp: %{http_code}\\\\n\" https://pypi.org/simple/swiss-public-transport-mcp/)",
+      "Bash(curl -sL https://pypi.org/project/swiss-public-transport-mcp/)",
+      "Bash(curl -s https://pypi.org/pypi/swiss-transport-mcp/json)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); i=d['info']; print\\('name:', i['name']\\); print\\('version:', i['version']\\); print\\('summary:', i['summary']\\)\")",
+      "Bash(uv build:*)",
+      "Bash(uvx --from ./dist/opendata_ch_transport_mcp-0.1.0-py3-none-any.whl opendata-ch-transport-mcp --help)",
+      "Bash(echo \"---exit: $?\")"
     ]
   }
 }
