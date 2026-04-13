@@ -4,15 +4,15 @@
 
 Build a production-quality MCP server for Swiss public transport wrapping `transport.opendata.ch` (free, no auth). Architecture leaves a clear seam for SBB GraphQL enrichment later. The existing `grll/sbb-mcp` is thin (3 tools, v0.1.0, no stationboard, debug breakpoints left in) — we aim to be meaningfully better.
 
-**Package:** `swiss-transport-mcp` | **Import:** `swiss_transport_mcp` | **Python:** >=3.12 | **License:** MIT
+**Package:** `swiss-public-transport-mcp` | **Import:** `swiss_public_transport_mcp` | **Python:** >=3.12 | **License:** MIT
 
 ---
 
 ## Directory Structure
 
 ```
-swiss-transport-mcp/
-├── src/swiss_transport_mcp/
+swiss-public-transport-mcp/
+├── src/swiss_public_transport_mcp/
 │   ├── __init__.py              # __version__ = "0.1.0"
 │   ├── __main__.py              # FastMCP app, lifespan, tool registration, entry point
 │   ├── tools.py                 # MCP tool functions (validate → delegate → format)
@@ -46,7 +46,7 @@ swiss-transport-mcp/
 
 No external dependencies. This is the contract that all other workstreams build against.
 
-### A1: Domain Models (`src/swiss_transport_mcp/models.py`)
+### A1: Domain Models (`src/swiss_public_transport_mcp/models.py`)
 
 All types are `@dataclass`. Not Pydantic — these are internal, no validation needed. Pydantic is only used at the tool boundary for request models.
 
@@ -134,7 +134,7 @@ class Stationboard:
     mode: str = "departure"             # "departure" | "arrival"
 ```
 
-### A2: Errors (`src/swiss_transport_mcp/errors.py`)
+### A2: Errors (`src/swiss_public_transport_mcp/errors.py`)
 
 ```python
 from __future__ import annotations
@@ -193,12 +193,12 @@ def retry_on_transient(max_retries: int = 3, base_delay: float = 1.0):
     return decorator
 ```
 
-### A3: Provider Protocol (`src/swiss_transport_mcp/clients/base.py`)
+### A3: Provider Protocol (`src/swiss_public_transport_mcp/clients/base.py`)
 
 ```python
 from __future__ import annotations
 from typing import Protocol
-from swiss_transport_mcp.models import Location, Connection, Stationboard
+from swiss_public_transport_mcp.models import Location, Connection, Stationboard
 
 
 class TransportClient(Protocol):
@@ -242,7 +242,7 @@ class TransportClient(Protocol):
 
 ## WORKSTREAM B: OpenData API Client
 
-**File:** `src/swiss_transport_mcp/clients/opendata.py`
+**File:** `src/swiss_public_transport_mcp/clients/opendata.py`
 **Depends on:** Workstream A (models, errors, protocol)
 **Test file:** `tests/test_opendata_client.py`
 
@@ -250,8 +250,8 @@ class TransportClient(Protocol):
 
 ```python
 import httpx
-from swiss_transport_mcp.models import *
-from swiss_transport_mcp.errors import TransportAPIError, RateLimitError, retry_on_transient
+from swiss_public_transport_mcp.models import *
+from swiss_public_transport_mcp.errors import TransportAPIError, RateLimitError, retry_on_transient
 
 
 # Transport type mapping: our public names → API values
@@ -271,7 +271,7 @@ class OpenDataClient:
         self._client = http_client or httpx.AsyncClient(
             base_url=self.BASE_URL,
             timeout=httpx.Timeout(15.0, connect=5.0),
-            headers={"User-Agent": "swiss-transport-mcp/0.1.0"},
+            headers={"User-Agent": "swiss-public-transport-mcp/0.1.0"},
         )
 ```
 
@@ -355,7 +355,7 @@ Provide realistic fixture data based on the API response shapes documented above
 
 ## WORKSTREAM C: Formatters
 
-**File:** `src/swiss_transport_mcp/formatters.py`
+**File:** `src/swiss_public_transport_mcp/formatters.py`
 **Depends on:** Workstream A (models only — no client dependency)
 **Test file:** `tests/test_formatters.py`
 
@@ -498,7 +498,7 @@ Test with synthetic dataclass instances (no HTTP mocking needed):
 **Depends on:** Workstreams A, B, C
 **Test files:** `tests/test_service.py`, `tests/test_tools.py`
 
-### D1: Service Layer (`src/swiss_transport_mcp/service.py`)
+### D1: Service Layer (`src/swiss_public_transport_mcp/service.py`)
 
 ```python
 class TransportService:
@@ -535,7 +535,7 @@ class TransportService:
 - Same station resolution fallback as connections
 - Catches errors → readable messages
 
-### D2: Tools (`src/swiss_transport_mcp/tools.py`)
+### D2: Tools (`src/swiss_public_transport_mcp/tools.py`)
 
 Each tool is a thin async function with a Pydantic model for input validation. Tools live here but are registered in `__main__.py`.
 
@@ -606,14 +606,14 @@ async def get_stationboard(input: StationboardInput, service: TransportService) 
     )
 ```
 
-### D3: App Wiring (`src/swiss_transport_mcp/__main__.py`)
+### D3: App Wiring (`src/swiss_public_transport_mcp/__main__.py`)
 
 ```python
 from contextlib import asynccontextmanager
 import httpx
 from mcp.server.fastmcp import FastMCP
-from swiss_transport_mcp.clients.opendata import OpenDataClient
-from swiss_transport_mcp.service import TransportService
+from swiss_public_transport_mcp.clients.opendata import OpenDataClient
+from swiss_public_transport_mcp.service import TransportService
 
 
 @asynccontextmanager
@@ -622,7 +622,7 @@ async def app_lifespan(server: FastMCP):
     async with httpx.AsyncClient(
         base_url=OpenDataClient.BASE_URL,
         timeout=httpx.Timeout(15.0, connect=5.0),
-        headers={"User-Agent": "swiss-transport-mcp/0.1.0"},
+        headers={"User-Agent": "swiss-public-transport-mcp/0.1.0"},
     ) as http_client:
         client = OpenDataClient(http_client)
         service = TransportService(client)
@@ -682,13 +682,13 @@ __version__ = "0.1.0"
 
 ## WORKSTREAM E: Scaffolding & CI
 
-**Files:** `pyproject.toml`, `LICENSE`, `.github/workflows/ci.yml`, `src/swiss_transport_mcp/__init__.py`, `src/swiss_transport_mcp/clients/__init__.py`, `tests/__init__.py`
+**Files:** `pyproject.toml`, `LICENSE`, `.github/workflows/ci.yml`, `src/swiss_public_transport_mcp/__init__.py`, `src/swiss_public_transport_mcp/clients/__init__.py`, `tests/__init__.py`
 
 ### E1: `pyproject.toml`
 
 ```toml
 [project]
-name = "swiss-transport-mcp"
+name = "swiss-public-transport-mcp"
 dynamic = ["version"]
 description = "MCP server for Swiss public transport — connections, stationboards, and real-time delays"
 readme = "README.md"
@@ -701,14 +701,14 @@ dependencies = [
 ]
 
 [project.scripts]
-swiss-transport-mcp = "swiss_transport_mcp.__main__:main"
+swiss-public-transport-mcp = "swiss_public_transport_mcp.__main__:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "src/swiss_transport_mcp/__init__.py"
+path = "src/swiss_public_transport_mcp/__init__.py"
 
 [tool.ruff]
 target-version = "py312"
@@ -776,7 +776,7 @@ In practice: Agent 1 goes first (it's fast), then Agents 2 and 3 run in parallel
 1. `uv sync --dev` installs cleanly
 2. `uv run ruff check . && uv run ruff format --check .` — no issues
 3. `uv run pytest` — all tests pass
-4. `uv run swiss-transport-mcp` — starts on stdio, no errors
+4. `uv run swiss-public-transport-mcp` — starts on stdio, no errors
 5. Manual test via MCP inspector or Claude Desktop:
    - `search_locations(query="Zürich")` → numbered station list with IDs
    - `search_connections(from_station="Zürich HB", to_station="Bern")` → formatted connections with legs, delays, occupancy

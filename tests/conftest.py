@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from swiss_transport_mcp.models import (
+from swiss_public_transport_mcp.models import (
     Connection,
     Leg,
     Location,
@@ -29,7 +29,7 @@ def mock_client():
 
 @pytest.fixture
 def service(mock_client):
-    from swiss_transport_mcp.service import TransportService
+    from swiss_public_transport_mcp.service import TransportService
 
     return TransportService(mock_client)
 

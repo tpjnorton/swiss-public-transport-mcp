@@ -27,7 +27,14 @@
       "WebFetch(domain:docplayer.org)",
       "WebFetch(domain:community.sbb.ch)",
       "WebFetch(domain:www.suisserugby.com)",
-      "WebFetch(domain:node128930-test-ham.appengine.flow.ch)"
+      "WebFetch(domain:node128930-test-ham.appengine.flow.ch)",
+      "Bash(pip install:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv run:*)",
+      "WebFetch(domain:mcpmarket.com)",
+      "Bash(gh api:*)",
+      "Bash(git mv:*)",
+      "Bash(rm -rf src/swiss_public_transport_mcp/__pycache__ src/swiss_public_transport_mcp/clients/__pycache__)"
     ]
   }
 }

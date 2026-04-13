@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-from swiss_transport_mcp.formatters import (
+from swiss_public_transport_mcp.formatters import (
     _format_duration,
     _format_occupancy,
     build_sbb_url,
@@ -10,7 +10,7 @@ from swiss_transport_mcp.formatters import (
     format_locations,
     format_stationboard,
 )
-from swiss_transport_mcp.models import Prognosis
+from swiss_public_transport_mcp.models import Prognosis
 
 from .conftest import (
     sample_connection,

@@ -5,10 +5,10 @@ from contextlib import asynccontextmanager
 import httpx
 from mcp.server.fastmcp import Context, FastMCP
 
-from swiss_transport_mcp.clients.opendata import OpenDataClient
-from swiss_transport_mcp.formatters import build_sbb_url
-from swiss_transport_mcp.service import TransportService
-from swiss_transport_mcp.tools import (
+from swiss_public_transport_mcp.clients.opendata import OpenDataClient
+from swiss_public_transport_mcp.formatters import build_sbb_url
+from swiss_public_transport_mcp.service import TransportService
+from swiss_public_transport_mcp.tools import (
     BookingLinkInput,
     SearchConnectionsInput,
     SearchLocationsInput,
@@ -21,7 +21,7 @@ async def app_lifespan(server: FastMCP):
     async with httpx.AsyncClient(
         base_url=OpenDataClient.BASE_URL,
         timeout=httpx.Timeout(15.0, connect=5.0),
-        headers={"User-Agent": "swiss-transport-mcp/0.1.0"},
+        headers={"User-Agent": "swiss-public-transport-mcp/0.1.0"},
     ) as http_client:
         client = OpenDataClient(http_client)
         service = TransportService(client)

@@ -1,4 +1,4 @@
-# swiss-transport-mcp
+# swiss-public-transport-mcp
 
 MCP server for Swiss public transport — connections, stationboards, and real-time delays.
 
@@ -7,15 +7,15 @@ Wraps [transport.opendata.ch](https://transport.opendata.ch) (free, no auth requ
 ## Install
 
 ```bash
-git clone https://github.com/tpjnorton/swiss-transport-mcp.git
-cd swiss-transport-mcp
+git clone https://github.com/tpjnorton/swiss-public-transport-mcp.git
+cd swiss-public-transport-mcp
 uv sync
 ```
 
 ## Usage
 
 ```bash
-uv run swiss-transport-mcp
+uv run swiss-public-transport-mcp
 ```
 
 Add to Claude Desktop config:
@@ -25,7 +25,7 @@ Add to Claude Desktop config:
   "mcpServers": {
     "swiss-transport": {
       "command": "uv",
-      "args": ["run", "--directory", "/path/to/swiss-transport-mcp", "swiss-transport-mcp"]
+      "args": ["run", "--directory", "/path/to/swiss-public-transport-mcp", "swiss-public-transport-mcp"]
     }
   }
 }

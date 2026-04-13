@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from urllib.parse import quote
 
-from swiss_transport_mcp.models import Connection, Location, Stationboard
+from swiss_public_transport_mcp.models import Connection, Location, Stationboard
 
 OCCUPANCY = {1: "\u25cf\u25cb\u25cb", 2: "\u25cf\u25cf\u25cb", 3: "\u25cf\u25cf\u25cf"}
 

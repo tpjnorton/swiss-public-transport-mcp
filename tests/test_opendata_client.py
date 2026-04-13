@@ -4,8 +4,8 @@ import httpx
 import pytest
 import respx
 
-from swiss_transport_mcp.clients.opendata import OpenDataClient
-from swiss_transport_mcp.errors import TransportAPIError
+from swiss_public_transport_mcp.clients.opendata import OpenDataClient
+from swiss_public_transport_mcp.errors import TransportAPIError
 
 BASE = "https://transport.opendata.ch/v1"
 

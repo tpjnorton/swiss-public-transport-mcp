@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from swiss_transport_mcp.clients.base import TransportClient
-from swiss_transport_mcp.errors import AmbiguousStationError, TransportAPIError
-from swiss_transport_mcp.formatters import format_connections, format_locations, format_stationboard
+from swiss_public_transport_mcp.clients.base import TransportClient
+from swiss_public_transport_mcp.errors import AmbiguousStationError, TransportAPIError
+from swiss_public_transport_mcp.formatters import format_connections, format_locations, format_stationboard
 
 
 class TransportService:

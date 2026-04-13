@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from swiss_transport_mcp.tools import (
+from swiss_public_transport_mcp.tools import (
     SearchConnectionsInput,
     SearchLocationsInput,
     StationboardInput,

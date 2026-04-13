@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from swiss_transport_mcp.models import Connection, Location, Stationboard
+from swiss_public_transport_mcp.models import Connection, Location, Stationboard
 
 
 class TransportClient(Protocol):
