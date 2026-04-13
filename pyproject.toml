@@ -21,6 +21,9 @@ build-backend = "hatchling.build"
 [tool.hatch.version]
 path = "src/swiss_public_transport_mcp/__init__.py"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/swiss_public_transport_mcp"]
+
 [tool.ruff]
 target-version = "py312"
 line-length = 100

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.tpjnorton/swiss-public-transport-mcp",
+  "description": "MCP server for Swiss public transport — journey planning, live stationboards, real-time delays, and SBB booking links. Wraps transport.opendata.ch (no API key required).",
+  "title": "Swiss Public Transport",
+  "repository": {
+    "url": "https://github.com/tpjnorton/swiss-public-transport-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "swiss-public-transport-mcp",
+      "version": "0.1.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
