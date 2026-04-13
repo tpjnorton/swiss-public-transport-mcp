@@ -237,8 +237,15 @@ class OpenDataClient:
         intermediate_stops: list[Stop] = []
 
         if journey:
-            line_name = journey.get("name")
+            # Same logic as _parse_stationboard_entry: prefer the user-facing
+            # `number` (e.g. "51") over the internal hafas `name` (e.g.
+            # "017062"), and combine with the category for "T 51" / "IC 1".
+            number = journey.get("number")
             category = journey.get("category")
+            raw_name = journey.get("name")
+            line_name = (
+                (f"{category} {number}" if category else number) if number else raw_name
+            )
             direction = journey.get("to")
             operator = journey.get("operator")
             capacity_first = journey.get("capacity1st")
