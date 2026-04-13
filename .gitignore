@@ -15,3 +15,4 @@ venv/
 .mypy_cache/
 htmlcov/
 .coverage
+src/swiss_public_transport_mcp/_version.py

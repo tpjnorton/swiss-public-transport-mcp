@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # hatch-vcs reads the git tag
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -57,6 +59,19 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - name: Stamp version into server.json from git tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          python - <<EOF
+          import json
+          with open("server.json") as f:
+              d = json.load(f)
+          d["version"] = "$VERSION"
+          d["packages"][0]["version"] = "$VERSION"
+          with open("server.json", "w") as f:
+              json.dump(d, f, indent=2)
+              f.write("\n")
+          EOF
       - name: Install mcp-publisher
         run: |
           curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" \

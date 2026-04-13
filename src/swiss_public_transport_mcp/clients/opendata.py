@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 import httpx
 
+from swiss_public_transport_mcp import __version__
 from swiss_public_transport_mcp.errors import RateLimitError, TransportAPIError, retry_on_transient
 from swiss_public_transport_mcp.models import (
     Connection,
@@ -32,7 +33,7 @@ class OpenDataClient:
         self._client = http_client or httpx.AsyncClient(
             base_url=self.BASE_URL,
             timeout=httpx.Timeout(15.0, connect=5.0),
-            headers={"User-Agent": "swiss-public-transport-mcp/0.1.0"},
+            headers={"User-Agent": f"swiss-public-transport-mcp/{__version__}"},
         )
 
     async def _request(self, path: str, params: list[tuple[str, str]]) -> dict:
