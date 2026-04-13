@@ -16,7 +16,7 @@ Wraps [transport.opendata.ch](https://transport.opendata.ch) — **free, no API 
 | Tool | Purpose |
 |---|---|
 | `search_locations` | Resolve a station/stop/POI by name or coordinates |
-| `search_connections` | Plan A → B with via, transport-type filters, arrival-time mode |
+| `plan_journey` | Plan A → B with via, transport-type filters, arrival-time mode |
 | `get_stationboard` | Live departures or arrivals from any stop |
 | `get_booking_link` | Build an SBB.ch URL for a journey so the user can buy a ticket |
 
