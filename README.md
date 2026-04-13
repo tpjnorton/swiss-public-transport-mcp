@@ -70,3 +70,6 @@ If you need official `opentransportdata.swiss` data — SIRI-SX disruption alert
 | Best for | quick journey planning, fast LLM responses, ticket purchase flow | rich operational data, official feeds |
 
 The two servers cover overlapping but distinct use cases — you can install both side by side.
+
+<!-- mcp-name: io.github.tpjnorton/swiss-public-transport-mcp -->
+
