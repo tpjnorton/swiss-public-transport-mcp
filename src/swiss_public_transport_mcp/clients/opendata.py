@@ -288,10 +288,18 @@ class OpenDataClient:
         if not stop.arrival:
             stop.arrival = self._parse_datetime(data.get("arrival"))
 
+        # Prefer the user-facing line number (e.g. "51", "1" for IC 1) over
+        # the internal hafas journey name (e.g. "004077"). Combine with the
+        # category when available so users see "T 51" / "IC 1" / "S 3".
+        number = data.get("number")
+        category = data.get("category")
+        raw_name = data.get("name")
+        line_name = (f"{category} {number}" if category else number) if number else raw_name
+
         return StationboardEntry(
             stop=stop,
-            line_name=data.get("name"),
-            category=data.get("category"),
+            line_name=line_name,
+            category=category,
             direction=data.get("to"),
             operator=data.get("operator"),
             capacity_first=data.get("capacity1st"),

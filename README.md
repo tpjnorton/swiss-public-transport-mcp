@@ -35,7 +35,7 @@ Add to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "swiss-transport": {
+    "swiss-public-transport": {
       "command": "uvx",
       "args": ["swiss-public-transport-mcp"]
     }

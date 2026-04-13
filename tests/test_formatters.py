@@ -161,7 +161,10 @@ def test_format_stationboard_normal():
     assert "On time" in result
 
 
-def test_format_stationboard_cancelled():
+def test_format_stationboard_no_realtime_data():
+    # Scheduled departures without prognosis (e.g. services more than a day
+    # out, before SBB publishes real-time predictions) must NOT be flagged as
+    # cancelled — the API has no reliable cancellation signal for us to use.
     entry = sample_stationboard_entry(
         line_name="IR 36",
         direction="Basel SBB",
@@ -171,7 +174,9 @@ def test_format_stationboard_cancelled():
     )
     board = sample_stationboard(station_name="Zürich HB", entries=[entry])
     result = format_stationboard(board)
-    assert "Cancelled" in result
+    assert "Cancelled" not in result
+    assert "IR 36" in result
+    assert "Basel SBB" in result
 
 
 def test_format_stationboard_delayed():

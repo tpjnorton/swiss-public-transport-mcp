@@ -201,17 +201,16 @@ def format_stationboard(board: Stationboard) -> str:
         line = entry.line_name or ""
         dest = entry.direction or ""
 
-        # Status logic
+        # Status logic. The opendata.ch API has no reliable cancellation
+        # signal, so we only report delays and confirmed on-time status.
+        # Absence of real-time data (common 1+ days ahead) => blank status.
         delay = entry.stop.delay_minutes
         has_prognosis = entry.stop.prognosis is not None
-        has_scheduled = entry.stop.departure is not None
 
         if delay is not None and delay > 0:
             status = f"+{delay} min"
         elif has_prognosis:
             status = "On time"
-        elif has_scheduled and not has_prognosis:
-            status = "\u26a0 Cancelled"
         else:
             status = ""
 

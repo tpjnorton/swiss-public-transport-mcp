@@ -101,6 +101,7 @@ def _stationboard_entry(
     departure="2025-01-15T14:02:00+0100",
     platform="8",
     prognosis=None,
+    number=None,
 ):
     return {
         "stop": {
@@ -111,6 +112,7 @@ def _stationboard_entry(
         },
         "name": name,
         "category": category,
+        "number": number,
         "to": to,
     }
 
@@ -230,6 +232,84 @@ async def test_get_stationboard(client):
     assert len(result.entries) == 2
     assert result.entries[0].line_name == "IC 1"
     assert result.entries[1].direction == "Wetzikon"
+
+
+@respx.mock
+async def test_stationboard_line_name_prefers_number_over_hafas_id(client):
+    # Real API payloads use `name` for the internal hafas journey ID (e.g.
+    # "004077") and `number` for the user-facing line label (e.g. "51").
+    # We must display the user-facing value, combined with the category.
+    respx.get(f"{BASE}/stationboard").mock(
+        return_value=httpx.Response(
+            200,
+            json=_stationboard_response(
+                entries=[
+                    # Zürich tram/bus: category "T", number "51", name is hafas id
+                    _stationboard_entry(
+                        name="004077", category="T", number="51", to="Zürich, Seebach"
+                    ),
+                    # Intercity train: category "IC", number "1", name "IC 1"
+                    _stationboard_entry(
+                        name="IC 1", category="IC", number="1", to="Genève-Aéroport"
+                    ),
+                ]
+            ),
+        )
+    )
+    result = await client.get_stationboard("Zürich, Technopark")
+    assert result.entries[0].line_name == "T 51"
+    assert result.entries[1].line_name == "IC 1"
+
+
+@respx.mock
+async def test_stationboard_line_name_falls_back_to_name_when_number_missing(client):
+    # Some entries omit `number`; we should fall back to the name field.
+    respx.get(f"{BASE}/stationboard").mock(
+        return_value=httpx.Response(
+            200,
+            json=_stationboard_response(
+                entries=[_stationboard_entry(name="IC 1", category="IC", number=None)]
+            ),
+        )
+    )
+    result = await client.get_stationboard("Zürich HB")
+    assert result.entries[0].line_name == "IC 1"
+
+
+@respx.mock
+async def test_stationboard_prognosis_with_all_null_fields_is_not_cancelled(client):
+    # The API commonly returns a prognosis object with all-null fields for
+    # services more than a day ahead (no real-time data yet). This must not
+    # be treated as a cancellation signal — prognosis should parse to None
+    # but the entry itself is a normal scheduled departure.
+    empty_prognosis = {
+        "platform": None,
+        "arrival": None,
+        "departure": None,
+        "capacity1st": None,
+        "capacity2nd": None,
+    }
+    respx.get(f"{BASE}/stationboard").mock(
+        return_value=httpx.Response(
+            200,
+            json=_stationboard_response(
+                entries=[
+                    _stationboard_entry(
+                        name="004077",
+                        category="T",
+                        number="51",
+                        to="Zürich, Seebach",
+                        prognosis=empty_prognosis,
+                    )
+                ]
+            ),
+        )
+    )
+    result = await client.get_stationboard("Zürich, Technopark")
+    entry = result.entries[0]
+    assert entry.stop.prognosis is None  # all-null fields collapse to None
+    assert entry.stop.delay_minutes is None
+    assert entry.stop.departure is not None  # but the scheduled time is intact
 
 
 # --- Error handling ---
