@@ -243,9 +243,7 @@ class OpenDataClient:
             number = journey.get("number")
             category = journey.get("category")
             raw_name = journey.get("name")
-            line_name = (
-                (f"{category} {number}" if category else number) if number else raw_name
-            )
+            line_name = (f"{category} {number}" if category else number) if number else raw_name
             direction = journey.get("to")
             operator = journey.get("operator")
             capacity_first = journey.get("capacity1st")
