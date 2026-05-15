@@ -11,8 +11,7 @@ updates:
       interval: "weekly"
       day: "monday"
     cooldown:
-      default: 7        # wait 7 days before opening any PR
-      semver-major: 30  # major bumps sit for a month first
+      default-days: 7
     groups:
       all-deps:
         patterns:
