@@ -6,13 +6,18 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
 dependencies = [
-    "mcp>=1.13.0",
+    "mcp>=1.23.0",
     "httpx>=0.28.0",
-    "pydantic>=2.0.0",
+    "pydantic>=2.4.0",
 ]
 
 [project.scripts]
 swiss-public-transport-mcp = "swiss_public_transport_mcp.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/tpjnorton/swiss-public-transport-mcp"
+Repository = "https://github.com/tpjnorton/swiss-public-transport-mcp"
+Issues = "https://github.com/tpjnorton/swiss-public-transport-mcp/issues"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
